@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/react";
+// import { Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import "./Map.css";
-import Apple from "../../Apple/Apple";
-import Snake from "../Snake/Snake";
+// import Apple from "../../Apple/Apple";
+// import Snake from "../Snake/Snake";
 
 interface ISnakePart {
   Xpos: number;
@@ -15,9 +15,24 @@ interface IApple {
 }
 
 function Map() {
-  const [isGameOver, setIsGameOver] = useState(false);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [blockWidth, setBlockWidth] = useState(0);
+  const [blockHeight, setBlockHeight] = useState(0);
+
+  const [gameLoopTimeout, setGameLoopTimeout] = useState(50);
+  const [timeoutId, setTimeoutId] = useState(0);
+
   const [directionChanged, setDirectionChanged] = useState(false);
   const [direction, setDirection] = useState("right");
+  const [isGameOver, setIsGameOver] = useState(false);
+
+  const [snake, setSnake] = useState<ISnakePart[]>([]);
+  const [startSnakeSize, setStartSnakeSize] = useState(0);
+  const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
+
+  const [snakeColor, setSnakeColor] = useState(getRandomColor());
+  const [appleColor, setAppleColor] = useState(getRandomColor());
 
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(
@@ -25,17 +40,12 @@ function Map() {
   );
   const [newHighScore, setNewHighScore] = useState(false);
 
-  const [snake, setSnake] = useState<ISnakePart[]>([]);
-  const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
-
-  const [gameLoopTimeout, setGameLoopTimeout] = useState(50);
-  const [timeoutId, setTimeoutId] = useState(0);
-
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [blockWidth, setBlockWidth] = useState(0);
-  const [blockHeight, setBlockHeight] = useState(0);
-  const [startSnakeSize, setStartSnakeSize] = useState(0);
+  function getRandomColor() {
+    let hexa = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) color += hexa[Math.floor(Math.random() * 16)];
+    return color;
+  }
 
   useEffect(() => {
     initGame();
@@ -107,7 +117,7 @@ function Map() {
 
   function gameLoop() {
     let timeoutId = setTimeout(() => {
-      if (!isGameOver) {
+      if (!isGameOver && snake.length !== 0) {
         moveSnake();
         tryToEatSnake();
         tryToEatApple();
@@ -121,25 +131,28 @@ function Map() {
   }
 
   function moveSnake() {
-    let snakeCopy = snake;
-    let previousPartX = snake[0].Xpos;
-    let previousPartY = snake[0].Ypos;
+    if (snake.length !== 0) {
+      let snakeCopy = snake;
 
-    let tmpPartX: number = previousPartX;
-    let tmpPartY: number = previousPartY;
+      let previousPartX = snake[0].Xpos;
+      let previousPartY = snake[0].Ypos;
 
-    moveHead();
+      let tmpPartX: number = previousPartX;
+      let tmpPartY: number = previousPartY;
 
-    for (let i = 1; i < snakeCopy.length; i++) {
-      tmpPartX = snakeCopy[i].Xpos;
-      tmpPartY = snakeCopy[i].Ypos;
-      snakeCopy[i].Xpos = previousPartX;
-      snakeCopy[i].Ypos = previousPartY;
-      previousPartX = tmpPartX;
-      previousPartY = tmpPartY;
+      moveHead();
+
+      for (let i = 1; i < snakeCopy.length; i++) {
+        tmpPartX = snakeCopy[i].Xpos;
+        tmpPartY = snakeCopy[i].Ypos;
+        snakeCopy[i].Xpos = previousPartX;
+        snakeCopy[i].Ypos = previousPartY;
+        previousPartX = tmpPartX;
+        previousPartY = tmpPartY;
+      }
+
+      setSnake(snakeCopy);
     }
-
-    setSnake(snakeCopy);
   }
 
   function moveHead() {
@@ -247,40 +260,43 @@ function Map() {
   }
 
   function tryToEatApple() {
-    let snakeCopy = snake;
-    let appleCopy = apple;
+    if (snake.length !== 0) {
+      let snakeCopy = snake;
+      let appleCopy = apple;
 
-    // if the snake's head is on an apple
-    if (
-      snakeCopy[0].Xpos === appleCopy.Xpos &&
-      snakeCopy[0].Ypos === appleCopy.Ypos
-    ) {
-      let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
+      if (
+        snakeCopy[0].Xpos === appleCopy.Xpos &&
+        snakeCopy[0].Ypos === appleCopy.Ypos
+      ) {
+        let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
 
-      snakeCopy.push(newTail);
+        snakeCopy.push(newTail);
 
-      appleCopy.Xpos =
-        Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
-        blockWidth;
-
-      appleCopy.Ypos =
-        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
-        blockHeight;
-
-      while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
         appleCopy.Xpos =
           Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
           blockWidth;
+
         appleCopy.Ypos =
           Math.floor(
             Math.random() * ((height - blockHeight) / blockHeight + 1)
           ) * blockHeight;
+
+        while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
+          appleCopy.Xpos =
+            Math.floor(
+              Math.random() * ((width - blockWidth) / blockWidth + 1)
+            ) * blockWidth;
+          appleCopy.Ypos =
+            Math.floor(
+              Math.random() * ((height - blockHeight) / blockHeight + 1)
+            ) * blockHeight;
+        }
+
+        if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
+
+        setSnake(snakeCopy);
+        setApple(apple);
       }
-
-      if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
-
-      setSnake(snakeCopy);
-      setApple(apple);
     }
   }
 
@@ -300,8 +316,9 @@ function Map() {
   }
 
   function resetGame() {
-    // snake reset
     let snake = [];
+    let appleCopy = apple;
+
     let Xpos = width / 2;
     let Ypos = height / 2;
     let snakeHead = { Xpos: width / 2, Ypos: height / 2 };
@@ -313,25 +330,24 @@ function Map() {
       snake.push(snakePart);
     }
 
-    // apple position reset
-    apple.Xpos =
+    appleCopy.Xpos =
       Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
       blockWidth;
-    apple.Ypos =
+    appleCopy.Ypos =
       Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
       blockHeight;
 
-    while (isAppleOnSnake(apple.Xpos, apple.Ypos)) {
-      apple.Xpos =
+    while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
+      appleCopy.Xpos =
         Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
         blockWidth;
-      apple.Ypos =
+      appleCopy.Ypos =
         Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
         blockHeight;
     }
 
     setSnake(snake);
-    setApple(apple);
+    setApple(appleCopy);
     setDirection("right");
     setDirectionChanged(false);
     setIsGameOver(false);
@@ -357,8 +373,7 @@ function Map() {
               height: blockHeight,
               left: snakePart.Xpos,
               top: snakePart.Ypos,
-              background: "red",
-              // background: snakeColor,
+              background: snakeColor,
             }}
           />
         );
@@ -370,14 +385,12 @@ function Map() {
           height: blockHeight,
           left: apple.Xpos,
           top: apple.Ypos,
-          background: "green",
-          // background: appleColor,
+          background: appleColor,
         }}
       />
-       <div id='Score' style={{ fontSize: width / 20 }}>
-          HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE:{' '}
-          {score}
-        </div>
+      <div id="Score" style={{ fontSize: width / 20 }}>
+        HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE: {score}
+      </div>
     </div>
   );
 }

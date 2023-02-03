@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import Score from "../../Score/Score";
+// import Score from "../../Score/Score";
 import Map from "../Map/Map";
 
 function App() {
