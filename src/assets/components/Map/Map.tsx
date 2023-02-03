@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import "./Map.css";
 import Apple from "../../Apple/Apple";
 import Snake from "../Snake/Snake";
 
@@ -102,7 +103,7 @@ function Map() {
     let timeoutId = setTimeout(() => {
       moveSnake();
       // tryToEatSnake();
-      // tryToEatApple();
+      tryToEatApple();
       setDirectionChanged(false);
 
       gameLoop();
@@ -116,8 +117,8 @@ function Map() {
     let previousPartX = snake[0].Xpos;
     let previousPartY = snake[0].Ypos;
 
-    let tmpPartX: number;
-    let tmpPartY: number;
+    let tmpPartX: number = previousPartX;
+    let tmpPartY: number = previousPartY;
 
     moveHead();
 
@@ -186,9 +187,9 @@ function Map() {
   }
 
   function handleKeyDown(event: any) {
-    if (isGameOver && event.keyCode === 32) {
-      //   resetGame();
-    }
+    // if (isGameOver && event.keyCode === 32) {
+    //   //   resetGame();
+    // }
 
     if (directionChanged) return;
 
@@ -234,10 +235,54 @@ function Map() {
     setDirection(newDirection);
   }
 
+  function tryToEatApple() {
+    let snakeCopy = snake;
+    let appleCopy = apple;
+
+    // if the snake's head is on an apple
+    if (
+      snakeCopy[0].Xpos === appleCopy.Xpos &&
+      snakeCopy[0].Ypos === appleCopy.Ypos
+    ) {
+      let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
+
+
+      snakeCopy.push(newTail);
+
+      appleCopy.Xpos =
+        Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
+        blockWidth;
+
+      appleCopy.Ypos =
+        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
+        blockHeight;
+
+      while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
+        appleCopy.Xpos =
+          Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
+          blockWidth;
+        appleCopy.Ypos =
+          Math.floor(
+            Math.random() * ((height - blockHeight) / blockHeight + 1)
+          ) * blockHeight;
+      }
+
+      if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
+
+      setSnake(snakeCopy);
+      setApple(apple);
+    }
+  }
+
+  function isAppleOnSnake(appleXpos: number, appleYpos: number) {
+    for (let i = 0; i < snake.length; i++) {
+      if (appleXpos === snake[i].Xpos && appleYpos === snake[i].Ypos)
+        return true
+    }
+    return false
+  }
+
   return (
-    // <Flex border="5px solid black" w="500px" h="500px">
-    /* <Snake />
-      <Apple /> */
     <div
       id="GameBoard"
       style={{
@@ -274,7 +319,6 @@ function Map() {
         }}
       />
     </div>
-    // </Flex>
   );
 }
 
