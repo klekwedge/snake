@@ -31,7 +31,7 @@ function Map() {
   const [isGameOver, setIsGameOver] = useState(false);
 
   const [snake, setSnake] = useState<ISnakePart[]>([]);
-  const [startSnakeSize, setStartSnakeSize] = useState(0);
+  const [startSnakeSize, setStartSnakeSize] = useState(6);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
 
   const [snakeColor, setSnakeColor] = useState(getRandomColor());
@@ -86,7 +86,6 @@ function Map() {
     let blockWidth = width / 30;
     let blockHeight = height / 20;
 
-    let startSnakeSize = 6;
     let snake = [];
     let Xpos = width / 2;
     let Ypos = height / 2;
@@ -113,13 +112,10 @@ function Map() {
         blockHeight;
     }
 
-    // if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
-
     setWidth(width);
     setHeight(height);
     setBlockWidth(blockWidth);
     setBlockHeight(blockHeight);
-    setStartSnakeSize(startSnakeSize);
     setSnake(snake);
     setApple({ Xpos: appleXpos, Ypos: appleYpos });
   }
@@ -136,7 +132,7 @@ function Map() {
             tryToEatApple();
             setDirectionChanged(false);
           }
-        }, 50);
+        }, gameLoopTimeout);
 
         setTimeoutId(timer);
       }
@@ -219,16 +215,6 @@ function Map() {
   }
 
   function changeDirection(event: KeyboardEvent) {
-    console.log("changeDirection", direction);
-
-    if (isGameOver && event.keyCode === 32) {
-      resetGame();
-      return;
-    }
-
-    // if (directionChanged) return;
-    // console.log('opa!');
-
     switch (event.keyCode) {
       case 37:
       case 65:
@@ -307,8 +293,7 @@ function Map() {
         setNewHighScore(true);
       }
 
-      // if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
-
+      setScore((score) => score + 1);
       setSnake(snakeCopy);
       setApple(appleCopy);
     }
@@ -365,24 +350,24 @@ function Map() {
     setDirection("right");
     setDirectionChanged(false);
     setIsGameOver(false);
-    setGameLoopTimeout(50);
     setScore(0);
     setNewHighScore(false);
     setSnakeColor(getRandomColor());
     setAppleColor(getRandomColor());
   }
 
-  // if (isGameOver) {
-  //   return (
-  //     <GameOver
-  //       width={width}
-  //       height={height}
-  //       highScore={highScore}
-  //       newHighScore={newHighScore}
-  //       score={score}
-  //     />
-  //   );
-  // }
+  if (isGameOver) {
+    return (
+      <GameOver
+        resetGame={resetGame}
+        width={width}
+        height={height}
+        highScore={highScore}
+        newHighScore={newHighScore}
+        score={score}
+      />
+    );
+  }
 
   return (
     <div
@@ -403,7 +388,7 @@ function Map() {
               height: blockHeight,
               left: snakePart.Xpos,
               top: snakePart.Ypos,
-              background: snakeColor,
+              background: index !== 0 ? snakeColor : "red",
             }}
           />
         );

@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import React from "react";
 
 interface GameOverProps {
@@ -6,6 +7,7 @@ interface GameOverProps {
   score: number;
   newHighScore: boolean;
   highScore: number;
+  resetGame: () => void;
 }
 
 function GameOver({
@@ -14,6 +16,7 @@ function GameOver({
   score,
   newHighScore,
   highScore,
+  resetGame
 }: GameOverProps) {
   return (
     <div
@@ -30,7 +33,7 @@ function GameOver({
         <div>
           {newHighScore ? "New local " : "Local "}high score: {highScore}
         </div>
-        <div id="PressSpaceText">Press Space to restart</div>
+        <Button onClick={resetGame} id="PressSpaceText">Restart</Button>
       </div>
     </div>
   );

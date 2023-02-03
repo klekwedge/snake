@@ -32,4 +32,7 @@
 #GameBoard #PressSpaceText {
   color: #2e7ecb;
   font-weight: bold;
+  font-size: 30px;
+  padding: 40px;
+  margin: 0 auto;
 }
