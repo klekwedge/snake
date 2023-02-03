@@ -195,23 +195,43 @@ function Map() {
     switch (event.keyCode) {
       case 37:
       case 65:
-        // goLeft();
+        goLeft();
         break;
       case 38:
       case 87:
-        // goUp();
+        goUp();
         break;
       case 39:
       case 68:
-        // goRight();
+        goRight();
         break;
       case 40:
       case 83:
-        // goDown();
+        goDown();
         break;
       default:
     }
     setDirectionChanged(true);
+  }
+
+  function goLeft() {
+    let newDirection = direction === "right" ? "right" : "left";
+    setDirection(newDirection);
+  }
+
+  function goUp() {
+    let newDirection = direction === "down" ? "down" : "up";
+    setDirection(newDirection);
+  }
+
+  function goRight() {
+    let newDirection = direction === "left" ? "left" : "right";
+    setDirection(newDirection);
+  }
+
+  function goDown() {
+    let newDirection = direction === "up" ? "up" : "down";
+    setDirection(newDirection);
   }
 
   return (
