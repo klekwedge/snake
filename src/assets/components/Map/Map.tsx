@@ -36,6 +36,7 @@ function Map() {
     gameLoop();
 
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
@@ -86,6 +87,8 @@ function Map() {
         blockHeight;
     }
 
+    if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
+
     setWidth(width);
     setHeight(height);
     setBlockWidth(blockWidth);
@@ -113,10 +116,8 @@ function Map() {
     let previousPartX = snake[0].Xpos;
     let previousPartY = snake[0].Ypos;
 
-    console.log(snake[0]);
-
-    let tmpPartX = previousPartX;
-    let tmpPartY = previousPartY;
+    let tmpPartX: number;
+    let tmpPartY: number;
 
     moveHead();
 
@@ -133,21 +134,56 @@ function Map() {
   }
 
   function moveHead() {
-    // switch (direction) {
-    //   case 'left':
-    //     moveHeadLeft()
-    //     break
-    //   case 'up':
-    //     moveHeadUp()
-    //     break
-    //   case 'right':
-    //     moveHeadRight()
-    //     break
-    //   default:
-    //     moveHeadDown()
-    // }
+    switch (direction) {
+      case "left":
+        moveHeadLeft();
+        break;
+      case "up":
+        moveHeadUp();
+        break;
+      case "right":
+        moveHeadRight();
+        break;
+      default:
+        moveHeadDown();
+    }
   }
-  
+
+  function moveHeadLeft() {
+    let snakeCopy = snake;
+    snakeCopy[0].Xpos =
+      snakeCopy[0].Xpos <= 0
+        ? width - blockWidth
+        : snakeCopy[0].Xpos - blockWidth;
+    setSnake(snakeCopy);
+  }
+
+  function moveHeadUp() {
+    let snakeCopy = snake;
+    snakeCopy[0].Ypos =
+      snakeCopy[0].Ypos <= 0
+        ? height - blockHeight
+        : snakeCopy[0].Ypos - blockHeight;
+    setSnake(snakeCopy);
+  }
+
+  function moveHeadRight() {
+    let snakeCopy = snake;
+    snakeCopy[0].Xpos =
+      snakeCopy[0].Xpos >= width - blockWidth
+        ? 0
+        : snakeCopy[0].Xpos + blockWidth;
+    setSnake(snakeCopy);
+  }
+
+  function moveHeadDown() {
+    let snakeCopy = snake;
+    snakeCopy[0].Ypos =
+      snakeCopy[0].Ypos >= height - blockHeight
+        ? 0
+        : snakeCopy[0].Ypos + blockHeight;
+    setSnake(snakeCopy);
+  }
 
   function handleKeyDown(event: any) {
     if (isGameOver && event.keyCode === 32) {
