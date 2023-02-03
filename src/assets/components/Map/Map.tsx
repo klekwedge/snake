@@ -75,7 +75,11 @@ function Map() {
     }
 
     width -= width % 30;
-    if (width < 30) width = 30;
+
+    if (width < 30) {
+      width = 30;
+    }
+
     let height = (width / 3) * 2;
     let blockWidth = width / 30;
     let blockHeight = height / 20;
@@ -119,21 +123,24 @@ function Map() {
   }
 
   useEffect(() => {
-    if (snake.length !== 0) {
-      let timer = setInterval(() => {
-        if (!isGameOver) {
-          console.log('!');
-          moveSnake();
-          tryToEatSnake();
-          tryToEatApple();
-          setDirectionChanged(false);
-        }
-  
-        // gameLoop();
-      }, 100);
-  
-      setTimeoutId(timer);
+    let timerInterval = setInterval(() => gameLoop(), 100);
+
+    function gameLoop() {
+      if (snake.length !== 0) {
+        let timer = setTimeout(() => {
+          if (!isGameOver) {
+            moveSnake();
+            tryToEatSnake();
+            tryToEatApple();
+            setDirectionChanged(false);
+          }
+        }, 50);
+
+        setTimeoutId(timer);
+      }
     }
+
+    return () => clearInterval(timerInterval);
   }, [snake]);
 
   // function gameLoop() {
@@ -153,26 +160,26 @@ function Map() {
   // }
 
   function moveSnake() {
-      let snakeCopy = snake;
+    let snakeCopy = snake;
 
-      let previousPartX = snake[0].Xpos;
-      let previousPartY = snake[0].Ypos;
+    let previousPartX = snake[0].Xpos;
+    let previousPartY = snake[0].Ypos;
 
-      let tmpPartX: number = previousPartX;
-      let tmpPartY: number = previousPartY;
+    let tmpPartX: number = previousPartX;
+    let tmpPartY: number = previousPartY;
 
-      moveHead();
+    moveHead();
 
-      for (let i = 1; i < snakeCopy.length; i++) {
-        tmpPartX = snakeCopy[i].Xpos;
-        tmpPartY = snakeCopy[i].Ypos;
-        snakeCopy[i].Xpos = previousPartX;
-        snakeCopy[i].Ypos = previousPartY;
-        previousPartX = tmpPartX;
-        previousPartY = tmpPartY;
-      }
+    for (let i = 1; i < snakeCopy.length; i++) {
+      tmpPartX = snakeCopy[i].Xpos;
+      tmpPartY = snakeCopy[i].Ypos;
+      snakeCopy[i].Xpos = previousPartX;
+      snakeCopy[i].Ypos = previousPartY;
+      previousPartX = tmpPartX;
+      previousPartY = tmpPartY;
+    }
 
-      setSnake(snakeCopy);
+    setSnake(snakeCopy);
   }
 
   function moveHead() {
@@ -274,48 +281,46 @@ function Map() {
   }
 
   function tryToEatApple() {
-      let snakeCopy = snake;
-      let appleCopy = apple;
+    let snakeCopy = snake;
+    let appleCopy = apple;
 
-      if (
-        snakeCopy[0].Xpos === appleCopy.Xpos &&
-        snakeCopy[0].Ypos === appleCopy.Ypos
-      ) {
-        let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
+    if (
+      snakeCopy[0].Xpos === appleCopy.Xpos &&
+      snakeCopy[0].Ypos === appleCopy.Ypos
+    ) {
+      let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
 
-        snakeCopy.push(newTail);
+      snakeCopy.push(newTail);
 
+      appleCopy.Xpos =
+        Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
+        blockWidth;
+
+      appleCopy.Ypos =
+        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
+        blockHeight;
+
+      while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
         appleCopy.Xpos =
           Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
           blockWidth;
-
         appleCopy.Ypos =
           Math.floor(
             Math.random() * ((height - blockHeight) / blockHeight + 1)
           ) * blockHeight;
-
-        while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
-          appleCopy.Xpos =
-            Math.floor(
-              Math.random() * ((width - blockWidth) / blockWidth + 1)
-            ) * blockWidth;
-          appleCopy.Ypos =
-            Math.floor(
-              Math.random() * ((height - blockHeight) / blockHeight + 1)
-            ) * blockHeight;
-        }
-
-        if (score === highScore) {
-          setHighScore((highScore) => highScore + 1);
-          localStorage.setItem("snakeHighScore", String(highScore));
-          setNewHighScore(true);
-        }
-
-        // if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
-
-        setSnake(snakeCopy);
-        setApple(appleCopy);
       }
+
+      if (score === highScore) {
+        setHighScore((highScore) => highScore + 1);
+        localStorage.setItem("snakeHighScore", String(highScore));
+        setNewHighScore(true);
+      }
+
+      // if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
+
+      setSnake(snakeCopy);
+      setApple(appleCopy);
+    }
   }
 
   function isAppleOnSnake(appleXpos: number, appleYpos: number) {
@@ -370,6 +375,10 @@ function Map() {
     setDirectionChanged(false);
     setIsGameOver(false);
     setGameLoopTimeout(50);
+    setScore(0);
+    setNewHighScore(false);
+    setSnakeColor(getRandomColor());
+    setAppleColor(getRandomColor());
   }
 
   if (isGameOver) {
@@ -381,9 +390,8 @@ function Map() {
         newHighScore={newHighScore}
         score={score}
       />
-    )
+    );
   }
-
 
   return (
     <div

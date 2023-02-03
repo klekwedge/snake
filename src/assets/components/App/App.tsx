@@ -9,11 +9,8 @@ function App() {
       h="100vh"
       alignItems="center"
       justifyContent="center"
-      flexDirection="column"
-      gap="30px"
     >
       <Map />
-      {/* <Score /> */}
     </Flex>
   );
 }
