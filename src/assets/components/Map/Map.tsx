@@ -21,6 +21,9 @@ function Map() {
   const [snake, setSnake] = useState<ISnakePart[]>([]);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
 
+  const [gameLoopTimeout, setGameLoopTimeout] = useState(50);
+  const [timeoutId, setTimeoutId] = useState(0);
+
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [blockWidth, setBlockWidth] = useState(0);
@@ -30,6 +33,7 @@ function Map() {
   useEffect(() => {
     initGame();
     window.addEventListener("keydown", handleKeyDown);
+    gameLoop();
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
@@ -90,6 +94,60 @@ function Map() {
     setSnake(snake);
     setApple({ Xpos: appleXpos, Ypos: appleYpos });
   }
+
+  function gameLoop() {
+    let timeoutId = setTimeout(() => {
+      moveSnake();
+      // tryToEatSnake();
+      // tryToEatApple();
+      setDirectionChanged(false);
+
+      gameLoop();
+    }, gameLoopTimeout);
+
+    setTimeoutId(timeoutId);
+  }
+
+  function moveSnake() {
+    let snakeCopy = snake;
+    let previousPartX = snake[0].Xpos;
+    let previousPartY = snake[0].Ypos;
+
+    console.log(snake[0]);
+
+    let tmpPartX = previousPartX;
+    let tmpPartY = previousPartY;
+
+    moveHead();
+
+    for (let i = 1; i < snakeCopy.length; i++) {
+      tmpPartX = snakeCopy[i].Xpos;
+      tmpPartY = snakeCopy[i].Ypos;
+      snakeCopy[i].Xpos = previousPartX;
+      snakeCopy[i].Ypos = previousPartY;
+      previousPartX = tmpPartX;
+      previousPartY = tmpPartY;
+    }
+
+    setSnake(snakeCopy);
+  }
+
+  function moveHead() {
+    // switch (direction) {
+    //   case 'left':
+    //     moveHeadLeft()
+    //     break
+    //   case 'up':
+    //     moveHeadUp()
+    //     break
+    //   case 'right':
+    //     moveHeadRight()
+    //     break
+    //   default:
+    //     moveHeadDown()
+    // }
+  }
+  
 
   function handleKeyDown(event: any) {
     if (isGameOver && event.keyCode === 32) {
