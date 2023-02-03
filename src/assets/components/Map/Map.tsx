@@ -14,6 +14,8 @@ interface IApple {
   Ypos: number;
 }
 
+type Direction = "down" | "up" | "right" | "left";
+
 function Map() {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -24,7 +26,7 @@ function Map() {
   const [timeoutId, setTimeoutId] = useState(0);
 
   const [directionChanged, setDirectionChanged] = useState(false);
-  const [direction, setDirection] = useState("right");
+  const [direction, setDirection] = useState<Direction>("right");
   const [isGameOver, setIsGameOver] = useState(false);
 
   const [snake, setSnake] = useState<ISnakePart[]>([]);
@@ -50,7 +52,7 @@ function Map() {
   useEffect(() => {
     initGame();
     window.addEventListener("keydown", handleKeyDown);
-    gameLoop();
+    // gameLoop();
 
     return () => {
       clearTimeout(timeoutId);
@@ -60,7 +62,7 @@ function Map() {
 
   function initGame() {
     let percentageWidth = 40;
-    let width;
+    let width: number;
     const gameBoard = document.getElementById("GameBoard");
 
     if (gameBoard && gameBoard.parentElement) {
@@ -104,7 +106,7 @@ function Map() {
         blockHeight;
     }
 
-    if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
+    // if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
 
     setWidth(width);
     setHeight(height);
@@ -115,23 +117,41 @@ function Map() {
     setApple({ Xpos: appleXpos, Ypos: appleYpos });
   }
 
-  function gameLoop() {
-    let timeoutId = setTimeout(() => {
-      if (!isGameOver && snake.length !== 0) {
-        moveSnake();
-        tryToEatSnake();
-        tryToEatApple();
-        setDirectionChanged(false);
-      }
+  useEffect(() => {
+    if (snake.length !== 0) {
+      let timer = setInterval(() => {
+        if (!isGameOver) {
+          console.log('!');
+          moveSnake();
+          tryToEatSnake();
+          tryToEatApple();
+          setDirectionChanged(false);
+        }
+  
+        // gameLoop();
+      }, 100);
+  
+      setTimeoutId(timer);
+    }
+  }, [snake]);
 
-      gameLoop();
-    }, gameLoopTimeout);
+  // function gameLoop() {
+  //   let timer = setTimeout(() => {
+  //     if (!isGameOver) {
+  //       // console.log('!');
+  //       moveSnake();
+  //       tryToEatSnake();
+  //       tryToEatApple();
+  //       setDirectionChanged(false);
+  //     }
 
-    setTimeoutId(timeoutId);
-  }
+  //     gameLoop();
+  //   }, gameLoopTimeout);
+
+  //   setTimeoutId(timer);
+  // }
 
   function moveSnake() {
-    if (snake.length !== 0) {
       let snakeCopy = snake;
 
       let previousPartX = snake[0].Xpos;
@@ -152,7 +172,6 @@ function Map() {
       }
 
       setSnake(snakeCopy);
-    }
   }
 
   function moveHead() {
@@ -215,8 +234,6 @@ function Map() {
 
     if (directionChanged) return;
 
-    if (directionChanged) return;
-
     switch (event.keyCode) {
       case 37:
       case 65:
@@ -240,27 +257,22 @@ function Map() {
   }
 
   function goLeft() {
-    let newDirection = direction === "right" ? "right" : "left";
-    setDirection(newDirection);
+    setDirection(direction === "right" ? "right" : "left");
   }
 
   function goUp() {
-    let newDirection = direction === "down" ? "down" : "up";
-    setDirection(newDirection);
+    setDirection(direction === "down" ? "down" : "up");
   }
 
   function goRight() {
-    let newDirection = direction === "left" ? "left" : "right";
-    setDirection(newDirection);
+    setDirection(direction === "left" ? "left" : "right");
   }
 
   function goDown() {
-    let newDirection = direction === "up" ? "up" : "down";
-    setDirection(newDirection);
+    setDirection(direction === "up" ? "up" : "down");
   }
 
   function tryToEatApple() {
-    if (snake.length !== 0) {
       let snakeCopy = snake;
       let appleCopy = apple;
 
@@ -292,12 +304,17 @@ function Map() {
             ) * blockHeight;
         }
 
-        if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
+        if (score === highScore) {
+          setHighScore((highScore) => highScore + 1);
+          localStorage.setItem("snakeHighScore", String(highScore));
+          setNewHighScore(true);
+        }
+
+        // if (gameLoopTimeout > 25) setGameLoopTimeout(gameLoopTimeout - 0.5);
 
         setSnake(snakeCopy);
-        setApple(apple);
+        setApple(appleCopy);
       }
-    }
   }
 
   function isAppleOnSnake(appleXpos: number, appleYpos: number) {
