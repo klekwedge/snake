@@ -13,7 +13,7 @@ function App() {
       gap="30px"
     >
       <Map />
-      <Score />
+      {/* <Score /> */}
     </Flex>
   );
 }

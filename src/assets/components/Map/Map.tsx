@@ -18,7 +18,13 @@ function Map() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [directionChanged, setDirectionChanged] = useState(false);
   const [direction, setDirection] = useState("right");
+
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(
+    Number(localStorage.getItem("snakeHighScore")) || 0
+  );
+  const [newHighScore, setNewHighScore] = useState(false);
+
   const [snake, setSnake] = useState<ISnakePart[]>([]);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
 
@@ -326,7 +332,7 @@ function Map() {
 
     setSnake(snake);
     setApple(apple);
-    setDirection('right');
+    setDirection("right");
     setDirectionChanged(false);
     setIsGameOver(false);
     setGameLoopTimeout(50);
@@ -368,6 +374,10 @@ function Map() {
           // background: appleColor,
         }}
       />
+       <div id='Score' style={{ fontSize: width / 20 }}>
+          HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE:{' '}
+          {score}
+        </div>
     </div>
   );
 }
