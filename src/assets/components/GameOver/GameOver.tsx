@@ -1,5 +1,4 @@
-import { Button } from "@chakra-ui/react";
-import React from "react";
+import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 
 interface GameOverProps {
   width: number;
@@ -16,10 +15,10 @@ function GameOver({
   score,
   newHighScore,
   highScore,
-  resetGame
+  resetGame,
 }: GameOverProps) {
   return (
-    <div
+    <Box
       id="GameBoard"
       style={{
         width: width,
@@ -27,15 +26,40 @@ function GameOver({
         borderWidth: width / 50,
       }}
     >
-      <div id="GameOver" style={{ fontSize: width / 15 }}>
-        <div id="GameOverText">GAME OVER</div>
+      <Flex
+        textAlign="center"
+        h="100%"
+        flexDirection="column"
+        justifyContent="space-evenly"
+        alignItems="center"
+        id="GameOver"
+        style={{ fontSize: width / 15 }}
+      >
+        <Heading
+          id="GameOverText"
+          fontSize="50px"
+          color="#ca0000"
+          textDecorationLine="underline"
+        >
+          GAME OVER
+        </Heading>
         <div>Your score: {score}</div>
         <div>
           {newHighScore ? "New local " : "Local "}high score: {highScore}
         </div>
-        <Button onClick={resetGame} id="PressSpaceText">Restart</Button>
-      </div>
-    </div>
+        <Button
+          onClick={resetGame}
+          color="#2e7ecb"
+          fontWeight="bold"
+          fontSize="30px"
+          padding="40px"
+          margin="0 auto"
+          id="PressSpaceText"
+        >
+          Restart
+        </Button>
+      </Flex>
+    </Box>
   );
 }
 

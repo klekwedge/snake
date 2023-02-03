@@ -1,9 +1,6 @@
-// import { Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import GameOver from "../GameOver/GameOver";
-import "./Map.css";
-// import Apple from "../../Apple/Apple";
-// import Snake from "../Snake/Snake";
 
 interface ISnakePart {
   Xpos: number;
@@ -28,7 +25,7 @@ function Map() {
 
   const [directionChanged, setDirectionChanged] = useState(false);
   const [direction, setDirection] = useState<Direction>("right");
-  const [isGameOver, setIsGameOver] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(true);
 
   const [snake, setSnake] = useState<ISnakePart[]>([]);
   const [startSnakeSize, setStartSnakeSize] = useState(6);
@@ -370,43 +367,57 @@ function Map() {
   }
 
   return (
-    <div
-      id="GameBoard"
-      style={{
-        width: width,
-        height: height,
-        borderWidth: width / 50,
-      }}
-    >
-      {snake.map((snakePart, index) => {
-        return (
-          <div
-            key={index}
-            className="Block"
-            style={{
-              width: blockWidth,
-              height: blockHeight,
-              left: snakePart.Xpos,
-              top: snakePart.Ypos,
-              background: index !== 0 ? snakeColor : "red",
-            }}
-          />
-        );
-      })}
-      <div
-        className="Block"
-        style={{
-          width: blockWidth,
-          height: blockHeight,
-          left: apple.Xpos,
-          top: apple.Ypos,
-          background: appleColor,
-        }}
-      />
-      <div id="Score" style={{ fontSize: width / 20 }}>
-        HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE: {score}
-      </div>
-    </div>
+    <>
+      <Box
+        position="relative"
+        margin="auto"
+        border="1px solid black"
+        w={width}
+        h={height}
+        borderWidth={`${width / 50}`}
+        id="GameBoard"
+      >
+        {snake.map((snakePart, index) => {
+          return (
+            <div
+              key={index}
+              className="Block"
+              style={{
+                width: blockWidth,
+                height: blockHeight,
+                left: snakePart.Xpos,
+                position: "absolute",
+                top: snakePart.Ypos,
+                background: index !== 0 ? snakeColor : "red",
+              }}
+            />
+          );
+        })}
+        <div
+          className="Block"
+          style={{
+            position: "absolute",
+            width: blockWidth,
+            height: blockHeight,
+            left: apple.Xpos,
+            top: apple.Ypos,
+            background: appleColor,
+          }}
+        />
+        <div
+          id="Score"
+          style={{
+            fontSize: width / 20,
+            position: "relative",
+            top: "105%",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE: {score}
+        </div>
+      </Box>
+    </>
   );
 }
 
