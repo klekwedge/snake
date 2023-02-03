@@ -52,14 +52,16 @@ function Map() {
 
   useEffect(() => {
     initGame();
-    window.addEventListener("keydown", handleKeyDown);
-    // gameLoop();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", changeDirection);
 
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", changeDirection);
     };
-  }, []);
+  }, [direction]);
 
   function initGame() {
     let percentageWidth = 40;
@@ -141,23 +143,7 @@ function Map() {
     }
 
     return () => clearInterval(timerInterval);
-  }, [snake]);
-
-  // function gameLoop() {
-  //   let timer = setTimeout(() => {
-  //     if (!isGameOver) {
-  //       // console.log('!');
-  //       moveSnake();
-  //       tryToEatSnake();
-  //       tryToEatApple();
-  //       setDirectionChanged(false);
-  //     }
-
-  //     gameLoop();
-  //   }, gameLoopTimeout);
-
-  //   setTimeoutId(timer);
-  // }
+  }, [snake, direction]);
 
   function moveSnake() {
     let snakeCopy = snake;
@@ -201,9 +187,7 @@ function Map() {
   function moveHeadLeft() {
     let snakeCopy = snake;
     snakeCopy[0].Xpos =
-      snakeCopy[0].Xpos <= 0
-        ? width - blockWidth
-        : snakeCopy[0].Xpos - blockWidth;
+      snakeCopy[0].Xpos <= 0 ? width - blockWidth : snake[0].Xpos - blockWidth;
     setSnake(snakeCopy);
   }
 
@@ -234,13 +218,16 @@ function Map() {
     setSnake(snakeCopy);
   }
 
-  function handleKeyDown(event: any) {
+  function changeDirection(event: KeyboardEvent) {
+    console.log("changeDirection", direction);
+
     if (isGameOver && event.keyCode === 32) {
       resetGame();
       return;
     }
 
-    if (directionChanged) return;
+    // if (directionChanged) return;
+    // console.log('opa!');
 
     switch (event.keyCode) {
       case 37:
@@ -261,10 +248,12 @@ function Map() {
         break;
       default:
     }
+
     setDirectionChanged(true);
   }
 
   function goLeft() {
+    console.log("goLeft", direction);
     setDirection(direction === "right" ? "right" : "left");
   }
 
@@ -273,6 +262,7 @@ function Map() {
   }
 
   function goRight() {
+    console.log("goRight", direction);
     setDirection(direction === "left" ? "left" : "right");
   }
 
@@ -304,6 +294,7 @@ function Map() {
         appleCopy.Xpos =
           Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
           blockWidth;
+
         appleCopy.Ypos =
           Math.floor(
             Math.random() * ((height - blockHeight) / blockHeight + 1)
@@ -381,17 +372,17 @@ function Map() {
     setAppleColor(getRandomColor());
   }
 
-  if (isGameOver) {
-    return (
-      <GameOver
-        width={width}
-        height={height}
-        highScore={highScore}
-        newHighScore={newHighScore}
-        score={score}
-      />
-    );
-  }
+  // if (isGameOver) {
+  //   return (
+  //     <GameOver
+  //       width={width}
+  //       height={height}
+  //       highScore={highScore}
+  //       newHighScore={newHighScore}
+  //       score={score}
+  //     />
+  //   );
+  // }
 
   return (
     <div
