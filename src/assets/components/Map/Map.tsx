@@ -190,7 +190,7 @@ function Map() {
 
   function handleKeyDown(event: any) {
     if (isGameOver && event.keyCode === 32) {
-      // resetGame();
+      resetGame();
       return;
     }
 
@@ -291,6 +291,45 @@ function Map() {
       if (snake[0].Xpos === snake[i].Xpos && snake[0].Ypos === snake[i].Ypos)
         setIsGameOver(true);
     }
+  }
+
+  function resetGame() {
+    // snake reset
+    let snake = [];
+    let Xpos = width / 2;
+    let Ypos = height / 2;
+    let snakeHead = { Xpos: width / 2, Ypos: height / 2 };
+    snake.push(snakeHead);
+
+    for (let i = 1; i < startSnakeSize; i++) {
+      Xpos -= blockWidth;
+      let snakePart = { Xpos: Xpos, Ypos: Ypos };
+      snake.push(snakePart);
+    }
+
+    // apple position reset
+    apple.Xpos =
+      Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
+      blockWidth;
+    apple.Ypos =
+      Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
+      blockHeight;
+
+    while (isAppleOnSnake(apple.Xpos, apple.Ypos)) {
+      apple.Xpos =
+        Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
+        blockWidth;
+      apple.Ypos =
+        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
+        blockHeight;
+    }
+
+    setSnake(snake);
+    setApple(apple);
+    setDirection('right');
+    setDirectionChanged(false);
+    setIsGameOver(false);
+    setGameLoopTimeout(50);
   }
 
   return (
