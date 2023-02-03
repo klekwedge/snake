@@ -101,10 +101,12 @@ function Map() {
 
   function gameLoop() {
     let timeoutId = setTimeout(() => {
-      moveSnake();
-      // tryToEatSnake();
-      tryToEatApple();
-      setDirectionChanged(false);
+      if (!isGameOver) {
+        moveSnake();
+        tryToEatSnake();
+        tryToEatApple();
+        setDirectionChanged(false);
+      }
 
       gameLoop();
     }, gameLoopTimeout);
@@ -187,9 +189,12 @@ function Map() {
   }
 
   function handleKeyDown(event: any) {
-    // if (isGameOver && event.keyCode === 32) {
-    //   //   resetGame();
-    // }
+    if (isGameOver && event.keyCode === 32) {
+      // resetGame();
+      return;
+    }
+
+    if (directionChanged) return;
 
     if (directionChanged) return;
 
@@ -246,7 +251,6 @@ function Map() {
     ) {
       let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
 
-
       snakeCopy.push(newTail);
 
       appleCopy.Xpos =
@@ -277,9 +281,16 @@ function Map() {
   function isAppleOnSnake(appleXpos: number, appleYpos: number) {
     for (let i = 0; i < snake.length; i++) {
       if (appleXpos === snake[i].Xpos && appleYpos === snake[i].Ypos)
-        return true
+        return true;
     }
-    return false
+    return false;
+  }
+
+  function tryToEatSnake() {
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[0].Xpos === snake[i].Xpos && snake[0].Ypos === snake[i].Ypos)
+        setIsGameOver(true);
+    }
   }
 
   return (
