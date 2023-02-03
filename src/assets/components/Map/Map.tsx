@@ -1,5 +1,6 @@
 // import { Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import GameOver from "../GameOver/GameOver";
 import "./Map.css";
 // import Apple from "../../Apple/Apple";
 // import Snake from "../Snake/Snake";
@@ -370,6 +371,19 @@ function Map() {
     setIsGameOver(false);
     setGameLoopTimeout(50);
   }
+
+  if (isGameOver) {
+    return (
+      <GameOver
+        width={width}
+        height={height}
+        highScore={highScore}
+        newHighScore={newHighScore}
+        score={score}
+      />
+    )
+  }
+
 
   return (
     <div
