@@ -4,8 +4,9 @@ import { GameState } from "./gameSlice.types";
 
 const initialState: GameState = {
   snakeBodyColor: "green",
+  snakeHeadColor: "blue",
+  snakeAppleColor: "red",
   appleColor: getRandomColor(),
-  IsSnakeBodySelectionOpen: true,
   isCustomPanelVisible: null,
 };
 
@@ -18,11 +19,21 @@ const gameSlice = createSlice({
     },
     selectSnakeBodyColor: (state, action) => {
       state.snakeBodyColor = action.payload;
-      state.IsSnakeBodySelectionOpen = false;
+    },
+    selectSnakeHeadColor: (state, action) => {
+      state.snakeHeadColor = action.payload;
+    },
+    selectAppleColor: (state, action) => {
+      state.appleColor = action.payload;
     },
   },
 });
 
 const { actions, reducer } = gameSlice;
-export const { chaneVisibleCustomPanel, selectSnakeBodyColor } = actions;
+export const {
+  chaneVisibleCustomPanel,
+  selectSnakeBodyColor,
+  selectSnakeHeadColor,
+  selectAppleColor,
+} = actions;
 export default reducer;

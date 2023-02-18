@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
 import { chaneVisibleCustomPanel } from "../../../slices/snakeSlice/gameSlice";
-import Customization from "../Customization/Customization";
+import CustomizationPanel from "../CustomizationPanel/CustomizationPanel";
 import HelloPanel from "../HelloPanel/HelloPanel";
 // import Score from "../../Score/Score";
 import Map from "../Map/Map";
@@ -42,7 +42,7 @@ function App() {
       flexDirection="column"
       gap="20px"
     >
-      {isCustomPanelVisible ? <Customization /> : <Map />}
+      {isCustomPanelVisible ? <CustomizationPanel /> : <Map />}
     </Flex>
   );
 }

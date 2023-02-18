@@ -2,7 +2,7 @@ import { Button, Flex, Heading } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
 import { chaneVisibleCustomPanel } from "../../../slices/snakeSlice/gameSlice";
-import Customization from "../Customization/Customization";
+import Customization from "../CustomizationPanel/CustomizationPanel";
 // import Score from "../../Score/Score";
 import Map from "../Map/Map";
 
