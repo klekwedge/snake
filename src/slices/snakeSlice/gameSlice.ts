@@ -6,12 +6,16 @@ const initialState: GameState = {
   snakeBodyColor: "green",
   appleColor: getRandomColor(),
   IsSnakeBodySelectionOpen: true,
+  isCustomPanelVisible: null,
 };
 
 const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
+    chaneVisibleCustomPanel: (state, action) => {
+      state.isCustomPanelVisible = action.payload;
+    },
     selectSnakeBodyColor: (state, action) => {
       state.snakeBodyColor = action.payload;
       state.IsSnakeBodySelectionOpen = false;
@@ -20,5 +24,5 @@ const gameSlice = createSlice({
 });
 
 const { actions, reducer } = gameSlice;
-export const { selectSnakeBodyColor } = actions;
+export const { chaneVisibleCustomPanel, selectSnakeBodyColor } = actions;
 export default reducer;

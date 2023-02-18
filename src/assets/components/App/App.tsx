@@ -1,9 +1,38 @@
-import { Box, Flex } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
+import { chaneVisibleCustomPanel } from "../../../slices/snakeSlice/gameSlice";
 import Customization from "../Customization/Customization";
+import HelloPanel from "../HelloPanel/HelloPanel";
 // import Score from "../../Score/Score";
 import Map from "../Map/Map";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const [isHelloPanelVisible, setIsHelloPanelVisible] = useState(true);
+  const { isCustomPanelVisible } = useAppSelector((state) => state.game);
+
+  function changePanel(res: boolean) {
+    dispatch(chaneVisibleCustomPanel(res));
+    setIsHelloPanelVisible(false);
+  }
+
+  if (isHelloPanelVisible) {
+    return <HelloPanel changePanel={changePanel} />;
+  }
+
   return (
     <Flex
       w="100vw"
@@ -13,8 +42,7 @@ function App() {
       flexDirection="column"
       gap="20px"
     >
-      <Customization />
-      <Map />
+      {isCustomPanelVisible ? <Customization /> : <Map />}
     </Flex>
   );
 }
