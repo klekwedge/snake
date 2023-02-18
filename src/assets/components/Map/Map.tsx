@@ -1,5 +1,6 @@
 import { Box, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "../../../hooks/redux-hooks";
 import GameOver from "../GameOver/GameOver";
 
 interface ISnakePart {
@@ -31,8 +32,8 @@ function Map() {
   const [startSnakeSize, setStartSnakeSize] = useState(6);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
 
-  const [snakeColor, setSnakeColor] = useState(getRandomColor());
-  const [appleColor, setAppleColor] = useState(getRandomColor());
+
+  const {snakeBodyColor, appleColor} = useAppSelector(state => state.game)
 
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(
@@ -349,8 +350,6 @@ function Map() {
     setIsGameOver(false);
     setScore(0);
     setNewHighScore(false);
-    setSnakeColor(getRandomColor());
-    setAppleColor(getRandomColor());
   }
 
   if (isGameOver) {
@@ -388,7 +387,7 @@ function Map() {
                 left: snakePart.Xpos,
                 position: "absolute",
                 top: snakePart.Ypos,
-                background: index !== 0 ? snakeColor : "red",
+                background: index !== 0 ? snakeBodyColor : "red",
               }}
             />
           );

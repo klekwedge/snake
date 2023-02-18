@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import Customization from "../../Customization/Customization";
+import Customization from "../Customization/Customization";
 // import Score from "../../Score/Score";
 import Map from "../Map/Map";
 
