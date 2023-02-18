@@ -23,11 +23,11 @@ function CustomPanel({ title, colors, buttonHandler }: CustomPanelProps) {
       flexDirection="column"
       gap="20px"
     >
-      <Heading as="h2" fontWeight="500">
+      <Heading as="h2" fontWeight="500" fontSize='35px'>
         {title}
       </Heading>
       <Flex gap="15px" alignItems="center" justifyContent="center">
-        <Flex gap="3px" fontSize="20px">
+        <Flex gap="3px" fontSize="20px" background='white' p='10px' borderRadius='5px'>
           {colors.map((item) => (
             <Box
               background={item}

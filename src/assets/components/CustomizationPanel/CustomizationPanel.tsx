@@ -28,6 +28,10 @@ function CustomizationPanel() {
       alignItems="center"
       flexDirection="column"
       gap="50px"
+      background='blue.500'
+      p='50px 50px 30px 50px'
+      borderRadius='20px'
+      color='white'
     >
       <CustomPanel
         colors={colors}
@@ -44,9 +48,13 @@ function CustomizationPanel() {
         title="Choose the color of the apple"
         buttonHandler={selectSnakeApple}
       />
-      <Flex gap="300px">
-        <Button colorScheme="linkedin">Past</Button>
-        <Button colorScheme="teal">Next</Button>
+      <Flex gap="400px">
+        <Button background='gray.500' _hover={{
+          background: 'gray.400'
+        }}>Past</Button>
+        <Button background='gray.500' _hover={{
+          background: 'gray.400'
+        }}>Next</Button>
       </Flex>
     </Flex>
   );
