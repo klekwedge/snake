@@ -1,23 +1,14 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
+import { Button, Flex } from "@chakra-ui/react";
+import { useAppDispatch } from "../../../hooks/redux-hooks";
 import {
+  changePanel,
   selectAppleColor,
   selectSnakeBodyColor,
   selectSnakeHeadColor,
 } from "../../../slices/snakeSlice/gameSlice";
 import CustomPanel from "../CustomPanel/CustomPanel";
 
-interface CustomizationPanelProps {
-  changePanel: (
-    isVisibleCustomPanel: boolean,
-    isVisibleHomePanel: boolean
-  ) => void;
-}
-
-function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
+function CustomizationPanel() {
   const dispatch = useAppDispatch();
   const colors = ["red", "blue", "green", "yellow", "orange", "purple"];
 
@@ -37,7 +28,12 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
     dispatch(selectSnakeBodyColor("green"));
     dispatch(selectSnakeHeadColor("blue"));
     dispatch(selectAppleColor("red"));
-    changePanel(false, true);
+    dispatch(
+      changePanel({
+        isHelloPanelVisible: true,
+        isCustomPanelVisible: false,
+      })
+    );
   }
 
   return (
@@ -84,7 +80,14 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
           _hover={{
             background: "gray.400",
           }}
-          onClick={() => changePanel(false, false)}
+          onClick={() =>
+            dispatch(
+              changePanel({
+                isHelloPanelVisible: false,
+                isCustomPanelVisible: false,
+              })
+            )
+          }
         >
           Next
         </Button>

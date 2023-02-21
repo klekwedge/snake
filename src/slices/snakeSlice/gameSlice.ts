@@ -5,8 +5,8 @@ import { GameState } from "./gameSlice.types";
 const initialState: GameState = {
   snakeBodyColor: "green",
   snakeHeadColor: "blue",
-  snakeAppleColor: "red",
-  appleColor: getRandomColor(),
+  appleColor: "red",
+  isHelloPanelVisible: true,
   isCustomPanelVisible: null,
   score: 0,
   highScore: Number(localStorage.getItem("snakeHighScore")) || 0,
@@ -18,8 +18,9 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    changeVisibleCustomPanel: (state, action) => {
-      state.isCustomPanelVisible = action.payload;
+    changePanel: (state, action) => {
+      state.isHelloPanelVisible = action.payload.isVisibleHelloPanel;
+      state.isCustomPanelVisible = action.payload.isCustomPanelVisible;
     },
     selectSnakeBodyColor: (state, action) => {
       state.snakeBodyColor = action.payload;
@@ -47,13 +48,13 @@ const gameSlice = createSlice({
 
 const { actions, reducer } = gameSlice;
 export const {
-  changeVisibleCustomPanel,
+  changePanel,
   selectSnakeBodyColor,
   selectSnakeHeadColor,
   selectAppleColor,
   changeScore,
   changeHighScore,
   changeNewHighScore,
-  changeGameStart
+  changeGameStart,
 } = actions;
 export default reducer;

@@ -1,13 +1,10 @@
 import { Button, Flex, Heading } from "@chakra-ui/react";
+import { useAppDispatch } from "../../../hooks/redux-hooks";
+import { changePanel } from "../../../slices/snakeSlice/gameSlice";
 
-interface HomePanelProps {
-  changePanel: (
-    isVisibleCustomPanel: boolean,
-    isVisibleHomePanel: boolean
-  ) => void;
-}
+function HomePanel() {
+  const dispatch = useAppDispatch();
 
-function HomePanel({ changePanel }: HomePanelProps) {
   return (
     <Flex
       flexDirection="column"
@@ -21,10 +18,30 @@ function HomePanel({ changePanel }: HomePanelProps) {
         Would you like to customize some game parameters?
       </Heading>
       <Flex alignItems="center" justifyContent="center" gap="10px">
-        <Button colorScheme="teal" onClick={() => changePanel(true, false)}>
+        <Button
+          colorScheme="teal"
+          onClick={() =>
+            dispatch(
+              changePanel({
+                isHelloPanelVisible: false,
+                isCustomPanelVisible: true,
+              })
+            )
+          }
+        >
           Yes
         </Button>
-        <Button colorScheme="linkedin" onClick={() => changePanel(false, false)}>
+        <Button
+          colorScheme="linkedin"
+          onClick={() =>
+            dispatch(
+              changePanel({
+                isHelloPanelVisible: false,
+                isCustomPanelVisible: false,
+              })
+            )
+          }
+        >
           No
         </Button>
       </Flex>

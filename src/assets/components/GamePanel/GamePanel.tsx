@@ -349,7 +349,7 @@ function GamePanel() {
     setDirection("right");
     setDirectionChanged(false);
     setIsGameOver(false);
-
+// set
     dispatch(changeScore(0));
     dispatch(changeNewHighScore(false));
   }

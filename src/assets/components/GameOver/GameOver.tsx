@@ -19,7 +19,6 @@ function GameOver({
 }: GameOverProps) {
   return (
     <Box
-      id="GameBoard"
       style={{
         width: width,
         height: height,
@@ -32,32 +31,35 @@ function GameOver({
         flexDirection="column"
         justifyContent="space-evenly"
         alignItems="center"
-        id="GameOver"
         style={{ fontSize: width / 15 }}
       >
-        <Heading
-          id="GameOverText"
-          fontSize="50px"
-          color="#ca0000"
-          textDecorationLine="underline"
-        >
+        <Heading fontSize="50px" color="#ca0000" textDecorationLine="underline">
           GAME OVER
         </Heading>
         <div>Your score: {score}</div>
         <div>
           {newHighScore ? "New local " : "Local "}high score: {highScore}
         </div>
-        <Button
-          onClick={resetGame}
-          color="#2e7ecb"
-          fontWeight="bold"
-          fontSize="30px"
-          padding="40px"
-          margin="0 auto"
-          id="PressSpaceText"
-        >
-          Restart
-        </Button>
+        <Flex flexWrap='wrap' gap='30px'>
+          <Button
+            onClick={resetGame}
+            color="#2e7ecb"
+            fontWeight="bold"
+            fontSize="30px"
+            padding="30px"
+          >
+            Restart
+          </Button>
+          <Button
+            // onClick={changePanel(true, false)}
+            color="#2e7ecb"
+            fontWeight="bold"
+            fontSize="30px"
+            padding="30px"
+          >
+            Customization
+          </Button>
+        </Flex>
       </Flex>
     </Box>
   );
