@@ -29,14 +29,9 @@ function StartPanel() {
           alignItems="center"
           gap="50px"
         >
-          <Flex gap="30px" flexWrap="wrap">
-            <Heading as="h2" fontSize="20px" fontWeight="500">
-              Your score: {score}
-            </Heading>
-            <Heading as="h2" fontSize="20px" fontWeight="500">
-              High score: {highScore}
-            </Heading>
-          </Flex>
+          <Heading as="h2" fontSize="20px" fontWeight="500">
+            High score: {highScore}
+          </Heading>
           <Button
             onClick={startNewGame}
             color="teal.600"

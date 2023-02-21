@@ -1,10 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
-import {
-  changeVisibleCustomPanel,
-  changeVisibleHelloPanel,
-} from "../../../slices/snakeSlice/gameSlice";
 import CustomizationPanel from "../CustomizationPanel/CustomizationPanel";
 import HomePanel from "../HomePanel/HomePanel";
 import GamePanel from "../GamePanel/GamePanel";

@@ -1,4 +1,9 @@
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import { useAppDispatch } from "../../../hooks/redux-hooks";
+import {
+  changeGameStart,
+  changePanel,
+} from "../../../slices/snakeSlice/gameSlice";
 
 interface GameOverProps {
   width: number;
@@ -17,6 +22,19 @@ function GameOver({
   highScore,
   resetGame,
 }: GameOverProps) {
+  const dispatch = useAppDispatch();
+
+  function goToCustomizationPanel() {
+    dispatch(
+      changePanel({
+        isHelloPanelVisible: false,
+        isCustomPanelVisible: true,
+      })
+    );
+
+    dispatch(changeGameStart(false));
+  }
+
   return (
     <Box
       style={{
@@ -40,7 +58,7 @@ function GameOver({
         <div>
           {newHighScore ? "New local " : "Local "}high score: {highScore}
         </div>
-        <Flex flexWrap='wrap' gap='30px'>
+        <Flex flexWrap="wrap" gap="30px">
           <Button
             onClick={resetGame}
             color="#2e7ecb"
@@ -51,7 +69,7 @@ function GameOver({
             Restart
           </Button>
           <Button
-            // onClick={changePanel(true, false)}
+            onClick={goToCustomizationPanel}
             color="#2e7ecb"
             fontWeight="bold"
             fontSize="30px"

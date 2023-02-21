@@ -15,7 +15,7 @@ function HomePanel() {
       justifyContent="center"
     >
       <Heading as="h1" fontWeight="500">
-        Would you like to customize some game parameters?
+        Would you like to customize game?
       </Heading>
       <Flex alignItems="center" justifyContent="center" gap="10px">
         <Button

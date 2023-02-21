@@ -380,7 +380,6 @@ function GamePanel() {
         w={width}
         h={height}
         borderWidth={`${width / 50}`}
-        id="GameBoard"
       >
         {snake.map((snakePart, index) => {
           return (
@@ -408,7 +407,6 @@ function GamePanel() {
           }}
         />
         <div
-          id="Score"
           style={{
             fontSize: width / 20,
             position: "relative",

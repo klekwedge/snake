@@ -37,7 +37,7 @@ function CustomPanel({ title, colors, buttonHandler, defaultColor }: CustomPanel
               h="20px"
               cursor="pointer"
               onClick={() => clickHandler(item)}
-              border={`${currentColor === item ? "3px solid black" : ""}`}
+              border={`${currentColor === item ? "3px solid white" : `3px solid ${item}`}`}
             />
           ))}
         </Flex>
