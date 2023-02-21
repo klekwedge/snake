@@ -11,6 +11,7 @@ const initialState: GameState = {
   score: 0,
   highScore: Number(localStorage.getItem("snakeHighScore")) || 0,
   newHighScore: false,
+  isGameStart: false,
 };
 
 const gameSlice = createSlice({
@@ -30,13 +31,16 @@ const gameSlice = createSlice({
       state.appleColor = action.payload;
     },
     changeScore: (state, action) => {
-      state.score = action.payload
+      state.score = action.payload;
     },
     changeHighScore: (state, action) => {
-      state.highScore = action.payload
+      state.highScore = action.payload;
     },
     changeNewHighScore: (state, action) => {
-      state.newHighScore = action.payload
+      state.newHighScore = action.payload;
+    },
+    changeGameStart: (state, action) => {
+      state.isGameStart = action.payload;
     },
   },
 });
@@ -49,6 +53,7 @@ export const {
   selectAppleColor,
   changeScore,
   changeHighScore,
-  changeNewHighScore
+  changeNewHighScore,
+  changeGameStart
 } = actions;
 export default reducer;

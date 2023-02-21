@@ -15,7 +15,6 @@ function App() {
     isVisibleCustomPanel: boolean,
     isVisibleHomePanel: boolean
   ) {
-    console.log('!');
     dispatch(changeVisibleCustomPanel(isVisibleCustomPanel));
     setIsHelloPanelVisible(isVisibleHomePanel);
   }

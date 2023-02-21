@@ -1,10 +1,18 @@
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks";
+import { changeGameStart } from "../../slices/snakeSlice/gameSlice";
 
 function StartPanel() {
+  const { score, highScore } = useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
+
+  function startNewGame() {
+    dispatch(changeGameStart(true));
+  }
+
   return (
     <Flex>
       <Box
-        id="GameBoard"
         style={
           {
             // width: width,
@@ -19,26 +27,24 @@ function StartPanel() {
           flexDirection="column"
           justifyContent="space-evenly"
           alignItems="center"
-          id="GameOver"
-          // style={{ fontSize: width / 15 }}
+          gap="50px"
         >
-          {/* <div>Your score: {score}</div> */}
-          <div>
-            {/* {newHighScore ? "New local " : "Local "}high score: {highScore} */}
-          </div>
-          <Heading id="GameOverText" fontSize="50px" color="teal.600">
-            Start
-          </Heading>
+          <Flex gap="30px" flexWrap="wrap">
+            <Heading as="h2" fontSize="20px" fontWeight="500">
+              Your score: {score}
+            </Heading>
+            <Heading as="h2" fontSize="20px" fontWeight="500">
+              High score: {highScore}
+            </Heading>
+          </Flex>
           <Button
-            // onClick={resetGame}
-            color="#2e7ecb"
+            onClick={startNewGame}
+            color="teal.600"
             fontWeight="bold"
             fontSize="30px"
-            padding="40px"
-            margin="0 auto"
-            id="PressSpaceText"
+            padding="30px"
           >
-            Restart
+            Start new game
           </Button>
         </Flex>
       </Box>

@@ -7,4 +7,5 @@ export interface GameState {
   score: number;
   highScore: number;
   newHighScore: boolean;
+  isGameStart: boolean;
 }

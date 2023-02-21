@@ -22,6 +22,17 @@ interface IApple {
 type Direction = "down" | "up" | "right" | "left";
 
 function GamePanel() {
+  const {
+    snakeBodyColor,
+    snakeHeadColor,
+    appleColor,
+    score,
+    highScore,
+    newHighScore,
+    isGameStart,
+  } = useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
+
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [blockWidth, setBlockWidth] = useState(0);
@@ -32,22 +43,11 @@ function GamePanel() {
 
   const [directionChanged, setDirectionChanged] = useState(false);
   const [direction, setDirection] = useState<Direction>("right");
-  const [isGameStart, setIsGameStart] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(true);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const [snake, setSnake] = useState<ISnakePart[]>([]);
   const [startSnakeSize, setStartSnakeSize] = useState(6);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
-
-  const { snakeBodyColor, appleColor } = useAppSelector((state) => state.game);
-  const dispatch = useAppDispatch();
-  const { score, highScore, newHighScore } = useAppSelector(
-    (store) => store.game
-  );
-
-  if (!isGameStart) {
-    return <StartPanel />;
-  }
 
   useEffect(() => {
     initGame();
@@ -367,6 +367,10 @@ function GamePanel() {
     );
   }
 
+  if (!isGameStart) {
+    return <StartPanel />;
+  }
+
   return (
     <>
       <Box
@@ -382,20 +386,18 @@ function GamePanel() {
           return (
             <div
               key={index}
-              className="Block"
               style={{
                 width: blockWidth,
                 height: blockHeight,
                 left: snakePart.Xpos,
                 position: "absolute",
                 top: snakePart.Ypos,
-                background: index !== 0 ? snakeBodyColor : "red",
+                background: index !== 0 ? snakeBodyColor : snakeHeadColor,
               }}
             />
           );
         })}
         <div
-          className="Block"
           style={{
             position: "absolute",
             width: blockWidth,

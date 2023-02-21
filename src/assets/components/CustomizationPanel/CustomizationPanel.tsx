@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
-import { selectSnakeBodyColor } from "../../../slices/snakeSlice/gameSlice";
+import { selectAppleColor, selectSnakeBodyColor, selectSnakeHeadColor } from "../../../slices/snakeSlice/gameSlice";
 import CustomPanel from "../CustomPanel/CustomPanel";
 
 interface CustomizationPanelProps {
@@ -22,12 +22,16 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
   }
 
   function selectSnakeHead(color: string) {
-    dispatch(selectSnakeBodyColor(color));
+    dispatch(selectSnakeHeadColor(color));
   }
 
   function selectSnakeApple(color: string) {
-    dispatch(selectSnakeBodyColor(color));
+    dispatch(selectAppleColor(color));
   }
+
+  // function backButtonHandler(color: string) {
+  //   dispatch(selectAppleColor(color));
+  // }
 
   return (
     <Flex
