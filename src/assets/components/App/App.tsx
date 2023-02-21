@@ -1,11 +1,10 @@
 import { Flex } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
 import { changeVisibleCustomPanel } from "../../../slices/snakeSlice/gameSlice";
 import CustomizationPanel from "../CustomizationPanel/CustomizationPanel";
-import StartPanel from "../StartPanel/StartPanel";
-// import Score from "../../Score/Score";
-import Map from "../Map/Map";
+import HomePanel from "../HomePanel/HomePanel";
+import GamePanel from "../GamePanel/GamePanel";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -22,7 +21,7 @@ function App() {
   }
 
   if (isHelloPanelVisible) {
-    return <StartPanel changePanel={changePanel} />;
+    return <HomePanel changePanel={changePanel} />;
   }
 
   return (
@@ -37,7 +36,7 @@ function App() {
       {isCustomPanelVisible ? (
         <CustomizationPanel changePanel={changePanel} />
       ) : (
-        <Map />
+        <GamePanel />
       )}
     </Flex>
   );

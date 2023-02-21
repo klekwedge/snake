@@ -1,13 +1,13 @@
 import { Button, Flex, Heading } from "@chakra-ui/react";
 
-interface StartPanelProps {
+interface HomePanelProps {
   changePanel: (
     isVisibleCustomPanel: boolean,
     isVisibleHomePanel: boolean
   ) => void;
 }
 
-function StartPanel({ changePanel }: StartPanelProps) {
+function HomePanel({ changePanel }: HomePanelProps) {
   return (
     <Flex
       flexDirection="column"
@@ -32,4 +32,4 @@ function StartPanel({ changePanel }: StartPanelProps) {
   );
 }
 
-export default StartPanel;
+export default HomePanel;

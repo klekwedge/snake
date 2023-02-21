@@ -4,4 +4,7 @@ export interface GameState {
   snakeAppleColor: string;
   appleColor: string;
   isCustomPanelVisible: boolean | null;
+  score: number;
+  highScore: number;
+  newHighScore: boolean;
 }

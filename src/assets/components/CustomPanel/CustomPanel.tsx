@@ -6,10 +6,11 @@ interface CustomPanelProps {
   title: string;
   colors: string[];
   buttonHandler: (color: string) => void;
+  defaultColor: string;
 }
 
-function CustomPanel({ title, colors, buttonHandler }: CustomPanelProps) {
-  const [currentColor, setCurrentColor] = useState("green");
+function CustomPanel({ title, colors, buttonHandler, defaultColor }: CustomPanelProps) {
+  const [currentColor, setCurrentColor] = useState(defaultColor);
 
   function clickHandler(color: string) {
     setCurrentColor(color);

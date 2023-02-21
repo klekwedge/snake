@@ -43,16 +43,19 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
       <CustomPanel
         colors={colors}
         title="Choose the color of the body of the snake"
+        defaultColor='green'
         buttonHandler={selectSnakeBody}
       />
       <CustomPanel
         colors={colors}
         title="Choose the color of the head of the snake"
+        defaultColor='blue'
         buttonHandler={selectSnakeHead}
       />
       <CustomPanel
         colors={colors}
         title="Choose the color of the apple"
+        defaultColor='red'
         buttonHandler={selectSnakeApple}
       />
       <Flex gap="400px">

@@ -1,6 +1,12 @@
 import { Box, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../../hooks/redux-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
+import {
+  changeHighScore,
+  changeNewHighScore,
+  changeScore,
+} from "../../../slices/snakeSlice/gameSlice";
+import StartPanel from "../../StartPanel/StartPanel";
 import GameOver from "../GameOver/GameOver";
 
 interface ISnakePart {
@@ -15,7 +21,7 @@ interface IApple {
 
 type Direction = "down" | "up" | "right" | "left";
 
-function Map() {
+function GamePanel() {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [blockWidth, setBlockWidth] = useState(0);
@@ -26,26 +32,21 @@ function Map() {
 
   const [directionChanged, setDirectionChanged] = useState(false);
   const [direction, setDirection] = useState<Direction>("right");
+  const [isGameStart, setIsGameStart] = useState(false);
   const [isGameOver, setIsGameOver] = useState(true);
 
   const [snake, setSnake] = useState<ISnakePart[]>([]);
   const [startSnakeSize, setStartSnakeSize] = useState(6);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
 
-
-  const {snakeBodyColor, appleColor} = useAppSelector(state => state.game)
-
-  const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(
-    Number(localStorage.getItem("snakeHighScore")) || 0
+  const { snakeBodyColor, appleColor } = useAppSelector((state) => state.game);
+  const dispatch = useAppDispatch();
+  const { score, highScore, newHighScore } = useAppSelector(
+    (store) => store.game
   );
-  const [newHighScore, setNewHighScore] = useState(false);
 
-  function getRandomColor() {
-    let hexa = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) color += hexa[Math.floor(Math.random() * 16)];
-    return color;
+  if (!isGameStart) {
+    return <StartPanel />;
   }
 
   useEffect(() => {
@@ -286,12 +287,12 @@ function Map() {
       }
 
       if (score === highScore) {
-        setHighScore((highScore) => highScore + 1);
+        dispatch(changeHighScore(highScore + 1));
         localStorage.setItem("snakeHighScore", String(highScore));
-        setNewHighScore(true);
+        dispatch(changeNewHighScore(true));
       }
 
-      setScore((score) => score + 1);
+      dispatch(changeScore(score + 1));
       setSnake(snakeCopy);
       setApple(appleCopy);
     }
@@ -348,8 +349,9 @@ function Map() {
     setDirection("right");
     setDirectionChanged(false);
     setIsGameOver(false);
-    setScore(0);
-    setNewHighScore(false);
+
+    dispatch(changeScore(0));
+    dispatch(changeNewHighScore(false));
   }
 
   if (isGameOver) {
@@ -420,4 +422,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default GamePanel;
