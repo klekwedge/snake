@@ -39,7 +39,7 @@ function GamePanel() {
   const [blockHeight, setBlockHeight] = useState(0);
 
   const [gameLoopTimeout, setGameLoopTimeout] = useState(50);
-  const [timeoutId, setTimeoutId] = useState(0);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
 
   const [directionChanged, setDirectionChanged] = useState(false);
   const [direction, setDirection] = useState<Direction>("right");

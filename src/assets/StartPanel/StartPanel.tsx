@@ -27,9 +27,9 @@ function StartPanel() {
           flexDirection="column"
           justifyContent="space-evenly"
           alignItems="center"
-          gap="50px"
+          gap="30px"
         >
-          <Heading as="h2" fontSize="20px" fontWeight="500">
+          <Heading as="h2" fontSize="25px" fontWeight="500">
             High score: {highScore}
           </Heading>
           <Button
