@@ -3,7 +3,11 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
-import { selectAppleColor, selectSnakeBodyColor, selectSnakeHeadColor } from "../../../slices/snakeSlice/gameSlice";
+import {
+  selectAppleColor,
+  selectSnakeBodyColor,
+  selectSnakeHeadColor,
+} from "../../../slices/snakeSlice/gameSlice";
 import CustomPanel from "../CustomPanel/CustomPanel";
 
 interface CustomizationPanelProps {
@@ -29,9 +33,12 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
     dispatch(selectAppleColor(color));
   }
 
-  // function backButtonHandler(color: string) {
-  //   dispatch(selectAppleColor(color));
-  // }
+  function backButtonHandler() {
+    dispatch(selectSnakeBodyColor("green"));
+    dispatch(selectSnakeHeadColor("blue"));
+    dispatch(selectAppleColor("red"));
+    changePanel(false, true);
+  }
 
   return (
     <Flex
@@ -47,19 +54,19 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
       <CustomPanel
         colors={colors}
         title="Choose the color of the body of the snake"
-        defaultColor='green'
+        defaultColor="green"
         buttonHandler={selectSnakeBody}
       />
       <CustomPanel
         colors={colors}
         title="Choose the color of the head of the snake"
-        defaultColor='blue'
+        defaultColor="blue"
         buttonHandler={selectSnakeHead}
       />
       <CustomPanel
         colors={colors}
         title="Choose the color of the apple"
-        defaultColor='red'
+        defaultColor="red"
         buttonHandler={selectSnakeApple}
       />
       <Flex gap="400px">
@@ -68,7 +75,7 @@ function CustomizationPanel({ changePanel }: CustomizationPanelProps) {
           _hover={{
             background: "gray.400",
           }}
-          onClick={() => changePanel(false, true)}
+          onClick={backButtonHandler}
         >
           Past
         </Button>
