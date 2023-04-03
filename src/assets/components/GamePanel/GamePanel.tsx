@@ -1,13 +1,9 @@
-import { Box, Input } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux-hooks";
-import {
-  changeHighScore,
-  changeNewHighScore,
-  changeScore,
-} from "../../../slices/snakeSlice/gameSlice";
-import StartPanel from "../../StartPanel/StartPanel";
-import GameOver from "../GameOver/GameOver";
+import { Box, Input } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux-hooks';
+import { changeHighScore, changeNewHighScore, changeScore } from '../../../slices/snakeSlice/gameSlice';
+import StartPanel from '../../StartPanel/StartPanel';
+import GameOver from '../GameOver/GameOver';
 
 interface ISnakePart {
   Xpos: number;
@@ -19,18 +15,12 @@ interface IApple {
   Ypos: number;
 }
 
-type Direction = "down" | "up" | "right" | "left";
+type Direction = 'down' | 'up' | 'right' | 'left';
 
 function GamePanel() {
-  const {
-    snakeBodyColor,
-    snakeHeadColor,
-    appleColor,
-    score,
-    highScore,
-    newHighScore,
-    isGameStart,
-  } = useAppSelector((state) => state.game);
+  const { snakeBodyColor, snakeHeadColor, appleColor, score, highScore, newHighScore, isGameStart } = useAppSelector(
+    (state) => state.game,
+  );
   const dispatch = useAppDispatch();
 
   const [width, setWidth] = useState(0);
@@ -42,30 +32,17 @@ function GamePanel() {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
 
   const [directionChanged, setDirectionChanged] = useState(false);
-  const [direction, setDirection] = useState<Direction>("right");
+  const [direction, setDirection] = useState<Direction>('right');
   const [isGameOver, setIsGameOver] = useState(false);
 
   const [snake, setSnake] = useState<ISnakePart[]>([]);
   const [startSnakeSize, setStartSnakeSize] = useState(6);
   const [apple, setApple] = useState<IApple>({ Xpos: 0, Ypos: 0 });
 
-  useEffect(() => {
-    initGame();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("keydown", changeDirection);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("keydown", changeDirection);
-    };
-  }, [direction]);
-
   function initGame() {
-    let percentageWidth = 40;
+    const percentageWidth = 40;
     let width: number;
-    const gameBoard = document.getElementById("GameBoard");
+    const gameBoard = document.getElementById('GameBoard');
 
     if (gameBoard && gameBoard.parentElement) {
       width = gameBoard.parentElement.offsetWidth * (percentageWidth / 100);
@@ -81,34 +58,28 @@ function GamePanel() {
       width = 30;
     }
 
-    let height = (width / 3) * 2;
-    let blockWidth = width / 30;
-    let blockHeight = height / 20;
+    const height = (width / 3) * 2;
+    const blockWidth = width / 30;
+    const blockHeight = height / 20;
 
-    let snake = [];
+    const snake = [];
     let Xpos = width / 2;
-    let Ypos = height / 2;
-    let snakeHead = { Xpos: width / 2, Ypos: height / 2 };
+    const Ypos = height / 2;
+    const snakeHead = { Xpos: width / 2, Ypos: height / 2 };
     snake.push(snakeHead);
 
-    for (let i = 1; i < startSnakeSize; i++) {
+    for (let i = 1; i < startSnakeSize; i += 1) {
       Xpos -= blockWidth;
-      let snakePart = { Xpos: Xpos, Ypos: Ypos };
+      const snakePart = { Xpos, Ypos };
       snake.push(snakePart);
     }
 
-    let appleXpos =
-      Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
-      blockWidth;
+    const appleXpos = Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) * blockWidth;
 
-    let appleYpos =
-      Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
-      blockHeight;
+    let appleYpos = Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) * blockHeight;
 
     while (appleYpos === snake[0].Ypos) {
-      appleYpos =
-        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
-        blockHeight;
+      appleYpos = Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) * blockHeight;
     }
 
     setWidth(width);
@@ -120,28 +91,51 @@ function GamePanel() {
   }
 
   useEffect(() => {
-    let timerInterval = setInterval(() => gameLoop(), 100);
+    initGame();
+  }, []);
 
-    function gameLoop() {
-      if (snake.length !== 0) {
-        let timer = setTimeout(() => {
-          if (!isGameOver) {
-            moveSnake();
-            tryToEatSnake();
-            tryToEatApple();
-            setDirectionChanged(false);
-          }
-        }, gameLoopTimeout);
+  function moveHeadLeft() {
+    const snakeCopy = snake;
+    snakeCopy[0].Xpos = snakeCopy[0].Xpos <= 0 ? width - blockWidth : snake[0].Xpos - blockWidth;
+    setSnake(snakeCopy);
+  }
 
-        setTimeoutId(timer);
-      }
+  function moveHeadUp() {
+    const snakeCopy = snake;
+    snakeCopy[0].Ypos = snakeCopy[0].Ypos <= 0 ? height - blockHeight : snakeCopy[0].Ypos - blockHeight;
+    setSnake(snakeCopy);
+  }
+
+  function moveHeadRight() {
+    const snakeCopy = snake;
+    snakeCopy[0].Xpos = snakeCopy[0].Xpos >= width - blockWidth ? 0 : snakeCopy[0].Xpos + blockWidth;
+    setSnake(snakeCopy);
+  }
+
+  function moveHeadDown() {
+    const snakeCopy = snake;
+    snakeCopy[0].Ypos = snakeCopy[0].Ypos >= height - blockHeight ? 0 : snakeCopy[0].Ypos + blockHeight;
+    setSnake(snakeCopy);
+  }
+
+  function moveHead() {
+    switch (direction) {
+      case 'left':
+        moveHeadLeft();
+        break;
+      case 'up':
+        moveHeadUp();
+        break;
+      case 'right':
+        moveHeadRight();
+        break;
+      default:
+        moveHeadDown();
     }
-
-    return () => clearInterval(timerInterval);
-  }, [snake, direction]);
+  }
 
   function moveSnake() {
-    let snakeCopy = snake;
+    const snakeCopy = snake;
 
     let previousPartX = snake[0].Xpos;
     let previousPartY = snake[0].Ypos;
@@ -151,7 +145,7 @@ function GamePanel() {
 
     moveHead();
 
-    for (let i = 1; i < snakeCopy.length; i++) {
+    for (let i = 1; i < snakeCopy.length; i += 1) {
       tmpPartX = snakeCopy[i].Xpos;
       tmpPartY = snakeCopy[i].Ypos;
       snakeCopy[i].Xpos = previousPartX;
@@ -163,54 +157,20 @@ function GamePanel() {
     setSnake(snakeCopy);
   }
 
-  function moveHead() {
-    switch (direction) {
-      case "left":
-        moveHeadLeft();
-        break;
-      case "up":
-        moveHeadUp();
-        break;
-      case "right":
-        moveHeadRight();
-        break;
-      default:
-        moveHeadDown();
-    }
+  function goLeft() {
+    setDirection(direction === 'right' ? 'right' : 'left');
   }
 
-  function moveHeadLeft() {
-    let snakeCopy = snake;
-    snakeCopy[0].Xpos =
-      snakeCopy[0].Xpos <= 0 ? width - blockWidth : snake[0].Xpos - blockWidth;
-    setSnake(snakeCopy);
+  function goUp() {
+    setDirection(direction === 'down' ? 'down' : 'up');
   }
 
-  function moveHeadUp() {
-    let snakeCopy = snake;
-    snakeCopy[0].Ypos =
-      snakeCopy[0].Ypos <= 0
-        ? height - blockHeight
-        : snakeCopy[0].Ypos - blockHeight;
-    setSnake(snakeCopy);
+  function goRight() {
+    setDirection(direction === 'left' ? 'left' : 'right');
   }
 
-  function moveHeadRight() {
-    let snakeCopy = snake;
-    snakeCopy[0].Xpos =
-      snakeCopy[0].Xpos >= width - blockWidth
-        ? 0
-        : snakeCopy[0].Xpos + blockWidth;
-    setSnake(snakeCopy);
-  }
-
-  function moveHeadDown() {
-    let snakeCopy = snake;
-    snakeCopy[0].Ypos =
-      snakeCopy[0].Ypos >= height - blockHeight
-        ? 0
-        : snakeCopy[0].Ypos + blockHeight;
-    setSnake(snakeCopy);
+  function goDown() {
+    setDirection(direction === 'up' ? 'up' : 'down');
   }
 
   function changeDirection(event: KeyboardEvent) {
@@ -237,58 +197,50 @@ function GamePanel() {
     setDirectionChanged(true);
   }
 
-  function goLeft() {
-    console.log("goLeft", direction);
-    setDirection(direction === "right" ? "right" : "left");
+  useEffect(() => {
+    window.addEventListener('keydown', changeDirection);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('keydown', changeDirection);
+    };
+  }, [direction]);
+
+  function isAppleOnSnake(appleXpos: number, appleYpos: number) {
+    for (let i = 0; i < snake.length; i += 1) {
+      if (appleXpos === snake[i].Xpos && appleYpos === snake[i].Ypos) return true;
+    }
+    return false;
   }
 
-  function goUp() {
-    setDirection(direction === "down" ? "down" : "up");
-  }
-
-  function goRight() {
-    console.log("goRight", direction);
-    setDirection(direction === "left" ? "left" : "right");
-  }
-
-  function goDown() {
-    setDirection(direction === "up" ? "up" : "down");
+  function tryToEatSnake() {
+    for (let i = 1; i < snake.length; i += 1) {
+      if (snake[0].Xpos === snake[i].Xpos && snake[0].Ypos === snake[i].Ypos) setIsGameOver(true);
+    }
   }
 
   function tryToEatApple() {
-    let snakeCopy = snake;
-    let appleCopy = apple;
+    const snakeCopy = snake;
+    const appleCopy = apple;
 
-    if (
-      snakeCopy[0].Xpos === appleCopy.Xpos &&
-      snakeCopy[0].Ypos === appleCopy.Ypos
-    ) {
-      let newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
+    if (snakeCopy[0].Xpos === appleCopy.Xpos && snakeCopy[0].Ypos === appleCopy.Ypos) {
+      const newTail = { Xpos: apple.Xpos, Ypos: apple.Ypos };
 
       snakeCopy.push(newTail);
 
-      appleCopy.Xpos =
-        Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
-        blockWidth;
+      appleCopy.Xpos = Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) * blockWidth;
 
-      appleCopy.Ypos =
-        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
-        blockHeight;
+      appleCopy.Ypos = Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) * blockHeight;
 
       while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
-        appleCopy.Xpos =
-          Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
-          blockWidth;
+        appleCopy.Xpos = Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) * blockWidth;
 
-        appleCopy.Ypos =
-          Math.floor(
-            Math.random() * ((height - blockHeight) / blockHeight + 1)
-          ) * blockHeight;
+        appleCopy.Ypos = Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) * blockHeight;
       }
 
       if (score === highScore) {
         dispatch(changeHighScore(highScore + 1));
-        localStorage.setItem("snakeHighScore", String(highScore));
+        localStorage.setItem('snakeHighScore', String(highScore));
         dispatch(changeNewHighScore(true));
       }
 
@@ -298,58 +250,55 @@ function GamePanel() {
     }
   }
 
-  function isAppleOnSnake(appleXpos: number, appleYpos: number) {
-    for (let i = 0; i < snake.length; i++) {
-      if (appleXpos === snake[i].Xpos && appleYpos === snake[i].Ypos)
-        return true;
-    }
-    return false;
-  }
+  useEffect(() => {
+    function gameLoop() {
+      if (snake.length !== 0) {
+        const timer = setTimeout(() => {
+          if (!isGameOver) {
+            moveSnake();
+            tryToEatSnake();
+            tryToEatApple();
+            setDirectionChanged(false);
+          }
+        }, gameLoopTimeout);
 
-  function tryToEatSnake() {
-    for (let i = 1; i < snake.length; i++) {
-      if (snake[0].Xpos === snake[i].Xpos && snake[0].Ypos === snake[i].Ypos)
-        setIsGameOver(true);
+        setTimeoutId(timer);
+      }
     }
-  }
+
+    const timerInterval = setInterval(() => gameLoop(), 100);
+
+    return () => clearInterval(timerInterval);
+  }, [snake, direction]);
 
   function resetGame() {
-    let snake = [];
-    let appleCopy = apple;
+    const snake = [];
+    const appleCopy = apple;
 
     let Xpos = width / 2;
-    let Ypos = height / 2;
-    let snakeHead = { Xpos: width / 2, Ypos: height / 2 };
+    const Ypos = height / 2;
+    const snakeHead = { Xpos: width / 2, Ypos: height / 2 };
     snake.push(snakeHead);
 
-    for (let i = 1; i < startSnakeSize; i++) {
+    for (let i = 1; i < startSnakeSize; i += 1) {
       Xpos -= blockWidth;
-      let snakePart = { Xpos: Xpos, Ypos: Ypos };
+      const snakePart = { Xpos, Ypos };
       snake.push(snakePart);
     }
 
-    appleCopy.Xpos =
-      Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
-      blockWidth;
-    appleCopy.Ypos =
-      Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
-      blockHeight;
+    appleCopy.Xpos = Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) * blockWidth;
+    appleCopy.Ypos = Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) * blockHeight;
 
     while (isAppleOnSnake(appleCopy.Xpos, appleCopy.Ypos)) {
-      appleCopy.Xpos =
-        Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) *
-        blockWidth;
-      appleCopy.Ypos =
-        Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) *
-        blockHeight;
+      appleCopy.Xpos = Math.floor(Math.random() * ((width - blockWidth) / blockWidth + 1)) * blockWidth;
+      appleCopy.Ypos = Math.floor(Math.random() * ((height - blockHeight) / blockHeight + 1)) * blockHeight;
     }
 
     setSnake(snake);
     setApple(appleCopy);
-    setDirection("right");
+    setDirection('right');
     setDirectionChanged(false);
     setIsGameOver(false);
-// set
     dispatch(changeScore(0));
     dispatch(changeNewHighScore(false));
   }
@@ -357,7 +306,7 @@ function GamePanel() {
   if (isGameOver) {
     return (
       <GameOver
-        resetGame={resetGame}
+        resetGame={() => resetGame()}
         width={width}
         height={height}
         highScore={highScore}
@@ -372,53 +321,42 @@ function GamePanel() {
   }
 
   return (
-    <>
-      <Box
-        position="relative"
-        margin="auto"
-        border="1px solid black"
-        w={width}
-        h={height}
-        borderWidth={`${width / 50}`}
-      >
-        {snake.map((snakePart, index) => {
-          return (
-            <div
-              key={index}
-              style={{
-                width: blockWidth,
-                height: blockHeight,
-                left: snakePart.Xpos,
-                position: "absolute",
-                top: snakePart.Ypos,
-                background: index !== 0 ? snakeBodyColor : snakeHeadColor,
-              }}
-            />
-          );
-        })}
+    <Box position="relative" margin="auto" border="1px solid black" w={width} h={height} borderWidth={`${width / 50}`}>
+      {snake.map((snakePart, index) => (
         <div
+          key={index}
           style={{
-            position: "absolute",
             width: blockWidth,
             height: blockHeight,
-            left: apple.Xpos,
-            top: apple.Ypos,
-            background: appleColor,
+            left: snakePart.Xpos,
+            position: 'absolute',
+            top: snakePart.Ypos,
+            background: index !== 0 ? snakeBodyColor : snakeHeadColor,
           }}
         />
-        <div
-          style={{
-            fontSize: width / 20,
-            position: "relative",
-            top: "105%",
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE: {score}
-        </div>
-      </Box>
-    </>
+      ))}
+      <div
+        style={{
+          position: 'absolute',
+          width: blockWidth,
+          height: blockHeight,
+          left: apple.Xpos,
+          top: apple.Ypos,
+          background: appleColor,
+        }}
+      />
+      <div
+        style={{
+          fontSize: width / 20,
+          position: 'relative',
+          top: '105%',
+          textAlign: 'center',
+          fontWeight: 'bold',
+        }}
+      >
+        HIGH-SCORE: {highScore}&ensp;&ensp;&ensp;&ensp;SCORE: {score}
+      </div>
+    </Box>
   );
 }
 

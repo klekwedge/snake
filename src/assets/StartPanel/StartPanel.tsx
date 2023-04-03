@@ -33,7 +33,7 @@ function StartPanel() {
             High score: {highScore}
           </Heading>
           <Button
-            onClick={startNewGame}
+            onClick={() => startNewGame()}
             color="teal.600"
             fontWeight="bold"
             fontSize="30px"

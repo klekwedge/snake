@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getRandomColor } from "../../hooks/getRandomColor";
+// import getRandomColor from "../../hooks/getRandomColor";
 import { GameState } from "./gameSlice.types";
 
 const initialState: GameState = {

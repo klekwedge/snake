@@ -9,7 +9,7 @@ function Apple() {
       position="relative"
       left="20px"
       top="40px"
-    ></Flex>
+     />
   );
 }
 

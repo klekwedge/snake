@@ -71,7 +71,7 @@ function CustomizationPanel() {
           _hover={{
             background: "gray.400",
           }}
-          onClick={backButtonHandler}
+          onClick={() => backButtonHandler()}
         >
           Past
         </Button>

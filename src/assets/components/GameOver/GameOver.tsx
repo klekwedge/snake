@@ -38,8 +38,8 @@ function GameOver({
   return (
     <Box
       style={{
-        width: width,
-        height: height,
+        width,
+        height,
         borderWidth: width / 50,
       }}
     >
@@ -69,7 +69,7 @@ function GameOver({
             Restart
           </Button>
           <Button
-            onClick={goToCustomizationPanel}
+            onClick={() => goToCustomizationPanel()}
             color="#2e7ecb"
             fontWeight="bold"
             fontSize="30px"
