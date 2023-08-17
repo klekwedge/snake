@@ -1,42 +1,51 @@
 # Snake
 
-## Table of contents
+**You can also read this README in [English](https://github.com/klekwedge/example/blob/main/README.EN.md).**
 
-- [Overview](#overview)
-  - [Screenshot](#screenshot)
-  - [Links](#links)
-- [My process](#my-process)
-  - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
-- [Author](#author)
+## Оглавление
 
-## Overview
+- [Инструкции по развертыванию](#инструкции-по-развертыванию)
+- [Обзор](#обзор)
+  - [Скриншот](#скриншот)
+  - [Ссылки](#ссылки)
+- [Мой процесс](#мой-процесс)
+  - [Стек](#стек)
+  - [Что я узнал](#что-я-узнал)
+- [Автор](#автор)
 
-### Screenshot
+## Инструкции по развертыванию
 
-![Main screen](./preview/screenshot_1.png)
+**Для запуска проекта на вашем компьютере должны быть установлены [npm](https://nodejs.org/en/) и [git](https://git-scm.com/downloads)**
 
-### Links
+1. Сделайте клон этого репозитория ```git clone https://github.com/klekwedge/example.git```
+2. Установите все необходимые пакеты npm с помощью ```npm i```
+3. Запустите проект командой ```npm run dev```
 
-- [Solution URL](https://github.com/klekwedge/snake)
-- [Live Site URL](https://klekwedge-snake.vercel.app/)
+## Обзор
 
-## My process
+### Скриншот
 
-### Built with
+![Главный экран](./preview/screenshot.png)
+
+### Ссылки
+
+- [Ссылка на проект](https://github.com/klekwedge/example)
+- [Деплой](https://klekwedge-example.vercel.app/)
+
+## Мой процесс
+
+### Стек
 
 - React
-- Redux Toolkit
 - TypeScript
+- Redux Toolkit
+- SCSS
 - Chakra UI
-- Vite
 
-### What I learned
+### Что я узнал
 
-I learned how to create the logic of the snake game, understood how to better switch between components, improved my skills in typing and working with state.
+## Автор
 
-## Author
-
-- [Website](https://klekwedge-cv.vercel.app/)
+- [Вебсайт](https://klekwedge-cv.vercel.app/)
 - [Linkedin](https://www.linkedin.com/in/klekwedge/)
 - [Facebook](https://www.facebook.com/klekwedge)
